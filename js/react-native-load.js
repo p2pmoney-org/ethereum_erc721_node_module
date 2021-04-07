@@ -44,113 +44,25 @@ class ReactNativeLoad {
 			
 			var GlobalClass = _globalscope.simplestore.Global;
 			
-			// dapps
+			// loading erc721 module
 			let modulescriptloader = ScriptLoader.findScriptLoader('moduleloader');
 			
-			// dappmodulesloader
-			ScriptLoader.reclaimScriptLoaderName('dappmodulesloader'); // in case another node module used this name
-			var dappsscriptloader = modulescriptloader.getChildLoader('dappmodulesloader');
+			var erc721scriptloader = modulescriptloader.getChildLoader('@p2pmoney-org/ethereum_erc721');
 
-			require('./loaders/dapps-load.js');
+			require('./loaders/erc721-load.js');
+	
 			
 			// end of modules load
-			rootscriptloader.registerEventListener('on_dapps_module_load_end', function(eventname) {
-				
-				var _nodeobject = GlobalClass.getGlobalObject();
-				
-				_nodeobject.loadModule('dapps', modulescriptloader, function() {
-					console.log('dapps loadModule finished')
-				});
-				
-			});
-			
-			
-			// erc721 module ready
-			rootscriptloader.registerEventListener('on_erc721_module_ready', function(eventname) {
-				
+			rootscriptloader.registerEventListener('@p2pmoney-org/on_erc721_module_load_end', function(eventname) {
 				if (callback)
 					callback(null, self);
-				
-			});
-
-			
-			// put in bootstrap _globalscope.simplestore now it exists
-			/*_globalscope.simplestore.ReactNativeLoad = this;
-
-
-			// load sequence
-			var Bootstrap = _globalscope.simplestore.Bootstrap;
-			var ScriptLoader = _globalscope.simplestore.ScriptLoader;
-			
-			var bootstrapobject = Bootstrap.getBootstrapObject();
-			var rootscriptloader = ScriptLoader.getRootScriptLoader();
-			
-			this._initLoadObjects(bootstrapobject, rootscriptloader);
-
-
-			//include global object here
-			require('./loaders/boot-load.js');
-			
-			var globalscriptloader = rootscriptloader.getChildLoader('globalloader');
-			
-			var modulescriptloader = globalscriptloader.getChildLoader('moduleloader');
-			modulescriptloader.load_scripts();
-
-			// listen to events
-			rootscriptloader.registerEventListener('on_bootstrap_load_end', function(eventname) {
-				console.log('ReactNativeLoad: bootstrap files loaded');
-			});
-				
-			rootscriptloader.registerEventListener('on_core_load_end', function(eventname) {
-				console.log('ReactNativeLoad: core modules files loaded');
-			});
-				
-			rootscriptloader.registerEventListener('on_global_object_initializing', function(eventname) {
-				console.log('ReactNativeLoad: global object is initializing');
-			});
-				
-			rootscriptloader.registerEventListener('on_global_object_ready', function(eventname) {
-				console.log('ReactNativeLoad: global object is now ready');
 			});
 			
-			rootscriptloader.registerEventListener('on_dapps_module_load_end', function(eventname) {
-				console.log('ReactNativeLoad: dapps module has been loaded');
+			
+			// erc721 module ready (sent at the end of erc721.registerHooks)
+			rootscriptloader.registerEventListener('on_erc721_module_ready', function(eventname) {
+				console.log('BrowserLoad.init: erc721 module is now ready ')
 			});
-			
-
-			// xtra config
-			require('./loaders/xtra-load.js');
-			
-
-			// include all common js files here 
-			require('./loaders/core-load.js');
-
-			globalscriptloader.load_scripts();
-
-
-			// then load libs and modules
-			var global = _globalscope.simplestore.Global.getGlobalObject();
-			
-			// libs
-			require('./loaders/libs-load.js');
-			
-			// ethereum
-			require('./loaders/ethnode-load.js');
-			//require('./loaders/ethchainreader-load.js');
-			
-			// dapps
-			var dappsscriptloader = modulescriptloader.getChildLoader('dappmodulesloader');
-
-			require('./loaders/dapps-load.js');
-
-			dappsscriptloader.load_scripts();
-			
-			
-			//  finalize intialization
-			global.finalizeGlobalScopeInit(function(res) {
-				console.log("ReactNativeLoad finished initialization of GlobalScope");
-				if (callback) callback(null, self);
-			});*/
 			
 		}
 		catch(e) {

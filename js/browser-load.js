@@ -44,35 +44,21 @@ class BrowserLoad {
 			
 			var GlobalClass = _globalscope.simplestore.Global;
 			
-			// dapps
+			// loading erc721 module
 			let modulescriptloader = ScriptLoader.findScriptLoader('moduleloader');
-			
-			// dappmodulesloader
-			ScriptLoader.reclaimScriptLoaderName('dappmodulesloader'); // in case another node module used this name
-			var dappsscriptloader = modulescriptloader.getChildLoader('dappmodulesloader');
 
-			require('./loaders/dapps-load.js');
-
-			
+			require('./loaders/erc721-load.js');
 			
 			// end of modules load
-			rootscriptloader.registerEventListener('on_dapps_module_load_end', function(eventname) {
-				
-				var _nodeobject = GlobalClass.getGlobalObject();
-				
-				_nodeobject.loadModule('dapps', modulescriptloader, function() {
-					console.log('dapps loadModule finished')
-				});
-				
+			rootscriptloader.registerEventListener('@p2pmoney-org/on_erc721_module_load_end', function(eventname) {
+				if (callback)
+					callback(null, self);
 			});
 			
 			
-			// erc721 module ready
+			// erc721 module ready (sent at the end of erc721.registerHooks)
 			rootscriptloader.registerEventListener('on_erc721_module_ready', function(eventname) {
-				
-				if (callback)
-					callback(null, self);
-				
+				console.log('BrowserLoad.init: erc721 module is now ready ')
 			});
 
 			

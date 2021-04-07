@@ -22,12 +22,12 @@ var modulescriptloader = ScriptLoader.findScriptLoader('moduleloader');
 var dappsscriptloader = ScriptLoader.findScriptLoader('dappmodulesloader');
 
 
-rootscriptloader.push_import(dappsscriptloader,'../../imports/dapps/module.js');
+//rootscriptloader.push_import(dappsscriptloader,'../../imports/dapps/module.js');
 //import '../../imports/dapps/module.js';
 
 var modulescriptloader = dappsscriptloader.getChildLoader('erc721dapploader-2');
 
-rootscriptloader.push_import(dappsscriptloader,'../../imports/dapps/erc721/module.js');
+//rootscriptloader.push_import(dappsscriptloader,'../../imports/dapps/erc721/module.js');
 //import '../../imports/dapps/erc721/module.js';
 
 rootscriptloader.push_import(dappsscriptloader,'../../imports/dapps/erc721/includes/module.js');

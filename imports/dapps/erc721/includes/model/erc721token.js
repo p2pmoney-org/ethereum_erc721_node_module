@@ -544,7 +544,8 @@ var ERC721Token = class extends SmartContractClass {
 					callback(err, null);
 			}
 			else {
-				callback(null, res);
+				if (callback)
+					callback(null, res);
 			}
 
 		})
