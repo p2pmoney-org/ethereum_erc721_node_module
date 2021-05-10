@@ -22,11 +22,13 @@ var Module = class {
 		var global = this.global;
 		var dappsmodule = global.getModuleObject('dapps');
 		
-		// create controllers
-		var erc721controllers = new this.ERC721AngularControllers(global);
-		dappsmodule.pushAngularController(erc721controllers);
-		
-		this.controllers = erc721controllers;
+		if (this.ERC721AngularControllers) {
+			// create angular controllers (note: not happening in nodejs)
+			var erc721controllers = new this.ERC721AngularControllers(global);
+			dappsmodule.pushAngularController(erc721controllers);
+			
+			this.controllers = erc721controllers;
+		}
 		
 		this.isready = true;
 	}

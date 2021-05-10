@@ -5,7 +5,7 @@ var Module = class {
 	constructor() {
 		// loading erc20 & erc721
 		this.name = 'dapps';
-		this.current_version = "0.14.5.2020.03.13";
+		this.current_version = "0.14.7.2021.05.10";
 		
 		this.global = null; // put by global on registration
 		this.isready = false;

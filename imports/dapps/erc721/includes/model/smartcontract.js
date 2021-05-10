@@ -21,16 +21,14 @@ var SmartContract = class {
 		
 		// web3 provider
 		var global = session.getGlobalObject();
-		var commonmodule = global.getModuleObject('common');
 		var ethnodemodule = global.getModuleObject('ethnode');
 		
 		this.web3providerurl = (web3providerurl ? web3providerurl : ethnodemodule.getWeb3ProviderUrl(session));
+
+		this.chainid = null;
+		this.networkid = null;
 		
 		// Contracts class
-		var global = session.getGlobalObject();
-		var commonmodule = global.getModuleObject('common');
-		var ethnodemodule = global.getModuleObject('ethnode');
-		
 		this.Contracts = ethnodemodule.Contracts;
 		
 		this.savedstatus = this.Contracts.STATUS_LOCAL;
@@ -52,6 +50,22 @@ var SmartContract = class {
 	
 	setWeb3ProviderUrl(url) {
 		this.web3providerurl = url;
+	}
+	
+	getChainId() {
+		return this.chainid;
+	}
+
+	setChainId(chainid) {
+		this.chainid = chainid;
+	}
+
+	getNetworkId() {
+		return this.networkid;
+	}
+
+	setNetworkId(networkid) {
+		this.networkid = networkid;
 	}
 	
 	getUUID() {

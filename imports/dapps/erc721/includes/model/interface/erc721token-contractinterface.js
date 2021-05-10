@@ -6,6 +6,13 @@ var ERC721TokenContractInterface = class {
 		this.session = session;
 		this.address = contractaddress;
 		
+		this.contractpath = './contracts/TokenERC721.json';
+		
+		this.web3providerurl = null;
+
+		this.chainid = null;
+		this.networkid = null;
+
 		// operating variables
 		this.finalized_init = null;
 		
@@ -13,6 +20,15 @@ var ERC721TokenContractInterface = class {
 		
 		var global = session.getGlobalObject();
 		this.ethnodemodule = global.getModuleObject('ethnode');
+	}
+	
+	getContractPath() {
+		return this.contractpath;
+	}
+
+	setContractPath(path) {
+		this.contractpath = path;
+		this.contractinstance = null;
 	}
 	
 	getAddress() {
@@ -23,6 +39,30 @@ var ERC721TokenContractInterface = class {
 		this.address = address;
 	}
 	
+	getWeb3ProviderUrl() {
+		return this.web3providerurl;
+	}
+	
+	setWeb3ProviderUrl(url) {
+		this.web3providerurl = url;
+	}
+	
+	getChainId() {
+		return this.chainid;
+	}
+
+	setChainId(chainid) {
+		this.chainid = chainid;
+	}
+
+	getNetworkId() {
+		return this.networkid;
+	}
+
+	setNetworkId(networkid) {
+		this.networkid = networkid;
+	}
+
 	getContractInstance() {
 		if (this.contractinstance)
 			return this.contractinstance;
@@ -30,8 +70,16 @@ var ERC721TokenContractInterface = class {
 		var session = this.session;
 		var global = session.getGlobalObject();
 		var ethnodemodule = global.getModuleObject('ethnode');
+
+		var contractpath = this.getContractPath();
+
+		this.contractinstance = ethnodemodule.getContractInstance(session, this.address, contractpath, this.web3providerurl);
+
+		if (this.chainid)
+		this.contractinstance.setChainId(this.chainid);
 		
-		this.contractinstance = ethnodemodule.getContractInstance(session, this.address, './contracts/TokenERC721.json');
+		if (this.networkid)
+		this.contractinstance.setNetworkId(this.networkid);
 		
 		return this.contractinstance;
 	}
@@ -542,18 +590,22 @@ var ERC721TokenContractInterface = class {
 			var args = [];
 	
 			var _tokenid = parseInt(tokenid);
-			var _data = data; // could check this is a buffer, and transform if not
 			
 			args.push(fromaddress);
 			args.push(toaddress);
 			args.push(_tokenid);
-			args.push(_data);
+			
+			if (data) {
+				var _data = data; // could check this is a buffer, and transform if not
+
+				args.push(_data);
+			}
 			
 			contracttransaction.setArguments(args);
 			
 			contracttransaction.setContractTransactionUUID(transactionuuid);
 	
-			contracttransaction.setMethodName('safeTransferFrom');
+			contracttransaction.setMethodName("safeTransferFrom");
 
 			return contractinstance.method_send(contracttransaction, callback);
 		})

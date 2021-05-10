@@ -91,6 +91,8 @@ var ERC721Token = class extends SmartContractClass {
 		var address = this.getAddress();
 		var contracttype = this.getContractType();
 		var web3providerurl = this.getWeb3ProviderUrl();
+		var chainid = this.getChainId();
+		var networkid = this.getNetworkId();
 		
 		var status = this.getStatus();
 		
@@ -104,7 +106,8 @@ var ERC721Token = class extends SmartContractClass {
 		var submissiondate = this.getLocalSubmissionDate();
 
 		
-		var json = {uuid: uuid, address: address, contracttype: contracttype, web3providerurl: web3providerurl, status: status, 
+		var json = {uuid: uuid, address: address, contracttype: contracttype, status: status, 
+				web3providerurl: web3providerurl, chainid: chainid, networkid: networkid, 
 				name: name, symbol: symbol, basetokenuri: basetokenuri,
 				creationdate: creationdate, submissiondate: submissiondate,
 				description: description};
@@ -146,6 +149,16 @@ var ERC721Token = class extends SmartContractClass {
 
 	
 	// chain part
+	getContractPath() {
+		var contractinterface = this.getContractInterface();
+		return contractinterface.getContractPath();
+	}
+
+	setContractPath(path) {
+		var contractinterface = this.getContractInterface();
+		return contractinterface.setContractPath(path);
+	}
+
 	getContractInterface() {
 		if (this.contractinterface)
 			return this.contractinterface;
@@ -157,7 +170,16 @@ var ERC721Token = class extends SmartContractClass {
 		var global = session.getGlobalObject();
 		var erc721tokenmodule = global.getModuleObject('erc721');
 		
-		this.contractinterface = new erc721tokenmodule.ERC721TokenContractInterface(session, contractaddress, web3providerurl);
+		this.contractinterface = new erc721tokenmodule.ERC721TokenContractInterface(session, contractaddress);
+
+		if (this.web3providerurl)
+		this.contractinterface.setWeb3ProviderUrl(this.web3providerurl);
+
+		if (this.chainid)
+		this.contractinterface.setChainId(this.chainid);
+		
+		if (this.networkid)
+		this.contractinterface.setNetworkId(this.networkid);
 		
 		return this.contractinterface;
 	}
@@ -171,8 +193,51 @@ var ERC721Token = class extends SmartContractClass {
 		var Contracts = this.Contracts;
 		var chaintestfunction = (this.isOnChain).bind(this);
 		var contractinstance = this.getContractInterface().getContractInstance();
+
+		var self = this;
+		var session = this.session;
+		var global = session.getGlobalObject();
+
+		var ethnodemodule = global.getModuleObject('ethnode');
+		var web3providerurl = this.getWeb3ProviderUrl();
+		var EthereumNodeAccess = ethnodemodule.getEthereumNodeAccessInstance(session, web3providerurl);
 		
-		return Contracts.checkStatus(this, chaintestfunction, contractinstance, callback);
+		var status;
+		
+		return Contracts.checkStatus(this, chaintestfunction, contractinstance)
+		.then(function(res) {
+			status = res;
+
+			if (self.chainid)
+				return self.chainid;
+			else
+				return EthereumNodeAccess.web3_getChainId()
+		})
+		.then(function(res) {
+			if (!self.chainid)
+			self.chainid = res;
+
+			if (self.networkid)
+				return self.networkid;
+			else
+				return EthereumNodeAccess.web3_getNetworkId()
+
+		})
+		.then(function(res) {
+			if (!self.networkid)
+			self.networkid = res;
+
+			if (callback)
+				callback(null, status);
+
+			return status;
+		})
+		.catch(function(err) {
+			if (callback)
+				callback(null, status);
+
+			return status;
+		});
 	}
 	
 	isOnChain(callback) {

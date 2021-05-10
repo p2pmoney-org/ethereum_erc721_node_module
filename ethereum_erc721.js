@@ -11,8 +11,8 @@ class Ethereum_erc721 {
 		
 		this.initializationpromise = null;
 		
-		var Ethereum_core = require('@p2pmoney-org/ethereum_core');
-		//var Ethereum_core = require('../ethereum_core');
+		//var Ethereum_core = require('@p2pmoney-org/ethereum_core');
+		var Ethereum_core = require('../ethereum_core');
 		
 		this.ethereum_core = Ethereum_core.getObject();
 	}
