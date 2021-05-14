@@ -4,7 +4,7 @@ var Module = class {
 	
 	constructor() {
 		this.name = 'erc721';
-		this.current_version = "0.30.1.2021.05.13";
+		this.current_version = "0.30.4.2021.05.13";
 		
 		this.global = null; // put by global on registration
 		this.isready = false;
@@ -115,7 +115,7 @@ var Module = class {
 		
 		var versioninfo = {};
 		
-		versioninfo.label = global.t('ethereum erc20');
+		versioninfo.label = global.t('ethereum erc721');
 		versioninfo.value = this.current_version;
 
 		versioninfos.push(versioninfo);

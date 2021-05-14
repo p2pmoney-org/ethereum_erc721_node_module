@@ -248,7 +248,7 @@ var Module = class {
 		
 		var versioninfo = {};
 		
-		versioninfo.label = global.t('ethereum erc20');
+		versioninfo.label = global.t('ethereum_dapps erc20&erc721');
 		versioninfo.value = this.current_version;
 
 		versioninfos.push(versioninfo);
