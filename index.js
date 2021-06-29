@@ -1,5 +1,6 @@
 /**
  * @author P2PMoney.org
+ * @name @p2pmoney-org/ethereum_erc721
  * @homepage http://www.p2pmoney.org/
  * @license MIT
  */
