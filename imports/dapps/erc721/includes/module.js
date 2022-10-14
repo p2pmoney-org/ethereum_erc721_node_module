@@ -4,7 +4,7 @@ var Module = class {
 	
 	constructor() {
 		this.name = 'erc721';
-		this.current_version = "0.30.10.2021.06.29";
+		this.current_version = "0.30.11.2022.10.14";
 		
 		this.global = null; // put by global on registration
 		this.isready = false;
